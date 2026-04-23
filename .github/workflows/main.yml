@@ -1,0 +1,27 @@
+name: Build and Push Docker Image
+
+# මෙතනින් කියන්නේ main branch එකට code එක push කරන හැම වෙලාවකම මේක වැඩ කරන්න ඕනේ කියලා
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest # මේ වැඩේ වෙන්නේ GitHub එකේ තියෙන ලිනක්ස් සර්වර් එකක
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3 # GitHub එකේ තියෙන ඔයාගේ code එක සර්වර් එකට ගන්නවා
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2 # Docker Hub එකට ලොග් වෙනවා
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v4 # Docker image එක හදලා Docker Hub එකට යවනවා
+        with:
+          context: .
+          push: true
+          # මෙතන student-app වෙනුවට ඔයා කැමති නමක් දෙන්න පුළුවන්
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/student-app:latest
