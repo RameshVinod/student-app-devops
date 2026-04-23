@@ -1,0 +1,19 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: student_db
+      MYSQL_USER: rama
+      MYSQL_PASSWORD: admin123
+      MYSQL_ROOT_PASSWORD: root123
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
